@@ -1,9 +1,29 @@
 #!/bin/bash
-# Arc'teryx Outlet 监控工具 - 运行脚本
+# Arc'teryx Outlet stock watcher - run script
 
-# 激活虚拟环境
+# Activate virtualenv
 source venv/bin/activate
 
-# 运行监控脚本（使用 undetected-chromedriver）
-python3 monitor.py "$@"
+# Load environment variables (optional): if .env exists, export it
+if [ -f .env ]; then
+  set -a
+  source .env
+  set +a
+fi
 
+# Run the watcher (shoe restock monitoring)
+CONFIG_FILE="stock_watch_config.json"
+HAS_CONFIG_ARG=false
+for arg in "$@"; do
+  case "$arg" in
+    --config|--config=*) HAS_CONFIG_ARG=true ;;
+  esac
+done
+
+if [ "$HAS_CONFIG_ARG" = true ]; then
+  python3 watch_stock.py "$@"
+elif [ -f "$CONFIG_FILE" ]; then
+  python3 watch_stock.py --config "$CONFIG_FILE" "$@"
+else
+  python3 watch_stock.py "$@"
+fi

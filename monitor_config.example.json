@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "log_file": "logs/monitor_unified.log",
+  "log_level": "INFO",
+  "tasks": [
+    {
+      "type": "catalog_changes",
+      "name": "mens-catalog",
+      "url": "https://outlet.arcteryx.com/ca/en/c/mens",
+      "baseline_file": "data/catalog_baseline_mens.json",
+      "headless": true,
+      "render_wait_seconds": 20,
+      "scroll_times": 3,
+      "scroll_sleep_seconds": 3,
+      "max_products": 0,
+      "notify_on_first_run": false,
+      "notify": { "added": true, "price_changes": true, "removed": true }
+    },
+    {
+      "type": "stock_watch",
+      "name": "stock-watch",
+      "config": {
+        "version": 1,
+        "data_dir": "data",
+        "state_file": "data/stock_watch_state.json",
+        "show_browser": false,
+        "render_wait_seconds": 10,
+        "scroll_times": 3,
+        "notify_on_first_run": true,
+        "repeat": { "max_notifications_per_item": 3, "repeat_interval_seconds": 1800 },
+        "error_notify": { "enabled": true, "repeat_interval_seconds": 3600 },
+        "watches": [
+          {
+            "name": "shoes-gtx",
+            "category_url": "https://outlet.arcteryx.com/ca/en/c/mens/footwear",
+            "keywords": ["waterproof", "gtx", "gore-tex"],
+            "sizes": ["8", "8.5"],
+            "max_products": 0,
+            "no_category_prefilter": false
+          }
+        ]
+      }
+    }
+  ]
+}

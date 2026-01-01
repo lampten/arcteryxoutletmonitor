@@ -1,79 +1,77 @@
 #!/bin/bash
-# Arc'teryx Outlet 监控工具 - 安装脚本
+# Arc'teryx Outlet stock watcher - setup script
 
 echo "================================"
-echo "Arc'teryx Outlet 监控工具安装"
+echo "Arc'teryx Outlet Stock Watch Setup"
 echo "================================"
 echo ""
 
-# 检查 Python 版本
-echo "检查 Python 版本..."
+# Check Python version
+echo "Checking Python version..."
 if ! command -v python3 &> /dev/null; then
-    echo "❌ 未找到 Python 3，请先安装 Python 3.7+"
+    echo "❌ Python 3 not found. Please install Python 3.7+"
     exit 1
 fi
 
 PYTHON_VERSION=$(python3 --version 2>&1 | awk '{print $2}')
-echo "✓ 找到 Python $PYTHON_VERSION"
+echo "✓ Found Python $PYTHON_VERSION"
 echo ""
 
-# 创建虚拟环境
+# Create virtualenv
 if [ ! -d "venv" ]; then
-    echo "创建 Python 虚拟环境..."
+    echo "Creating Python virtual environment..."
     python3 -m venv venv
     if [ $? -eq 0 ]; then
-        echo "✓ 虚拟环境创建成功"
+        echo "✓ Virtual environment created"
     else
-        echo "❌ 虚拟环境创建失败"
+        echo "❌ Failed to create virtual environment"
         exit 1
     fi
 else
-    echo "✓ 虚拟环境已存在"
+    echo "✓ Virtual environment already exists"
 fi
 echo ""
 
-# 激活虚拟环境并安装依赖
-echo "安装 Python 依赖包..."
+# Activate venv and install dependencies
+echo "Installing Python dependencies..."
 source venv/bin/activate
 pip install -r requirements.txt
 
 if [ $? -eq 0 ]; then
-    echo "✓ 依赖安装成功"
+    echo "✓ Dependencies installed"
 else
-    echo "❌ 依赖安装失败"
+    echo "❌ Failed to install dependencies"
     exit 1
 fi
 echo ""
 
-# 创建必要的目录
-echo "创建数据目录..."
+# Create required directories
+echo "Creating data/log directories..."
 mkdir -p data
 mkdir -p logs
-echo "✓ 目录创建成功"
+echo "✓ Directories created"
 echo ""
 
-# 设置执行权限
-chmod +x monitor.py
-echo "✓ 已设置执行权限"
+# Set execute permissions
+chmod +x watch_stock.py monitor_unified.py run.sh
+echo "✓ Executable permissions set"
 echo ""
 
 echo "================================"
-echo "安装完成！"
+echo "Setup complete!"
 echo "================================"
 echo ""
-echo "使用方法："
-echo "  1. 运行一次监控："
+echo "Usage:"
+echo "  1) Run once (defaults: men's footwear + default keywords):"
 echo "     ./run.sh"
-echo "     或者："
-echo "     source venv/bin/activate && python3 monitor.py"
 echo ""
-echo "  2. 持续监控（每30分钟）："
-echo "     ./run.sh --continuous"
+echo "  2) Use a config file:"
+echo "     cp stock_watch_config.example.json stock_watch_config.json"
+echo "     ./run.sh --config stock_watch_config.json"
 echo ""
-echo "  3. 设置定时任务（可选）："
-echo "     查看 README.md 了解如何使用 cron 或 launchd"
+echo "  3) Schedule on Linux (optional):"
+echo "     See README.md (cron example)"
 echo ""
-echo "首次运行将保存当前商品信息作为基准。"
-echo "祝您捕获到心仪的商品！🏔️"
+echo "The first run writes a baseline in the state file."
+echo "If a target size is already in stock, an alert is sent by default (disable with notify_on_first_run=false)."
 echo ""
-

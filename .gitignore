@@ -1,6 +1,8 @@
-# 数据文件
+# Data files
 data/
 *.json
+!stock_watch_config.example.json
+!monitor_config.example.json
 
 # Python
 __pycache__/
@@ -24,7 +26,7 @@ wheels/
 .installed.cfg
 *.egg
 
-# 虚拟环境
+# Virtual environments
 venv/
 env/
 ENV/
@@ -38,26 +40,25 @@ ENV/
 *.swo
 *~
 
-# 日志文件
+# Log files
 logs/
 *.log
 
 # macOS
 .DS_Store
 
-# 报告文件
+# Report files
 *.txt
 !requirements.txt
 
-# 环境变量（不要提交敏感信息！）
+# Environment variables (do NOT commit secrets)
 .env
 
-# AWS 密钥（不要提交！）
+# SSH keys (do NOT commit)
 *.pem
 *.key
 
-# 临时文件
+# Temporary files
 *.tmp
 *.bak
 .cache/
-
